@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,8 @@ import com.example.naviGithubProject.network.ApiStatus.SUCCESS
 import com.example.naviGithubProject.network.NaviApiHelper
 import com.example.naviGithubProject.network.NaviModel
 import com.example.naviGithubProject.network.RetrofitHelper
+import com.example.naviGithubProject.utils.hide
+import com.example.naviGithubProject.utils.show
 import com.example.naviGithubProject.viewmodels.ClosedPrViewModel
 import com.example.naviGithubProject.viewmodels.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_pr_list.*
@@ -52,15 +55,21 @@ class PrListFragment : Fragment() {
         adapter = ClosedPrListAdapter()
         rv_closed_pr?.adapter = adapter
 
-        viewmodel.getClosedPrList().observe(viewLifecycleOwner){
-            when(it.apiStatus){
-                LOADING -> Log.d("ashish","PR loading")
-                SUCCESS -> {
-                    it.data?.let{ closedPrList ->
-                        adapter.addData(closedPrList as ArrayList<NaviModel>)
-                    }
+        viewmodel.getClosedPrList().observe(viewLifecycleOwner) {
+            when (it.apiStatus) {
+                LOADING -> {
+                    rv_closed_pr?.hide()
+                    pb_loader?.show()
                 }
-                ERROR -> {Log.d("ashish","PR error")}
+                SUCCESS -> {
+                    pb_loader?.hide()
+                    rv_closed_pr?.show()
+                    it.data?.let { closedPrList -> adapter.addData(closedPrList as ArrayList<NaviModel>) }
+                }
+                ERROR -> {
+                    pb_loader?.hide()
+                    Toast.makeText(activity, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

@@ -2,4 +2,7 @@
     <string name="app_name">Navi Github Project</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="something_went_wrong">Something Went Wrong. Please try later !</string>
+    <string name="lbl_pr_creation_date">PR created on %s</string>
+    <string name="lbl_pr_closed_date">PR closed on %s</string>
 </resources>
